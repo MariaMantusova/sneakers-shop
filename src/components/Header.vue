@@ -1,10 +1,12 @@
+<script></script>
+
 <template>
-  <header class='flex justify-between border-b border-slate-300 px-10 py-8'>
+  <header class='flex justify-between border-b border-slate-200 px-10 py-8'>
 
     <div class='flex items-center gap-4'>
       <img class='w-10' src='/logo.png' alt='Логотип сайта'>
       <div>
-        <h2 class='text-xl font-bold uppercase'>SNEAKERS</h2>
+        <h1 class='text-xl font-bold uppercase'>SNEAKERS</h1>
         <p class='text-slate-400'>Магазин лучших кроссовок</p>
       </div>
     </div>
@@ -26,5 +28,3 @@
 
   </header>
 </template>
-
-<script></script>
