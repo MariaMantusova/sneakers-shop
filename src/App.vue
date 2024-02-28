@@ -31,7 +31,7 @@
         params.title = `*${filters.searchQuery}*`
       }
 
-      const { data } = await axios.get('https://604781a0efa572c1.mokky.dev/items', {
+      const { data } = await axios.get('https://4860d1de94ba74d5.mokky.dev/items', {
         params
       });
 
