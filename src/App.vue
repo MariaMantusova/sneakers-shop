@@ -1,5 +1,5 @@
 <script setup>
-  import {onMounted, reactive, ref, watch} from 'vue';
+  import {onMounted, reactive, ref, watch, provide} from 'vue';
   import axios from 'axios';
 
   import Header from './components/Header.vue';
@@ -21,6 +21,50 @@
     filters.searchQuery = evt.target.value
   }
 
+  async function fetchFavorites() {
+    try {
+      const { data: favorites } = await axios.get('https://4860d1de94ba74d5.mokky.dev/favorites')
+
+      items.value = items.value.map(item => {
+        const favoriteItem = favorites.find(favorite => favorite.parentId === item.id);
+
+        if (!favoriteItem) {
+          return item;
+        }
+
+        return {
+          ...item,
+          isFavorite: true,
+          favoriteId: favoriteItem.id,
+        }
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async function addToFavorites(item) {
+    try {
+      if (!item.isFavorite) {
+        const obj = {
+          parentId: item.id
+        }
+        item.isFavorite = true;
+
+        const {data} = await axios.post('https://4860d1de94ba74d5.mokky.dev/favorites', obj);
+
+        item.favoriteId = data.id;
+      } else {
+        item.isFavorite = false;
+        await axios.delete(`https://4860d1de94ba74d5.mokky.dev/favorites/${item.favoriteId}`);
+        item.favoriteId = null;
+      }
+
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   async function fetchItems() {
     try {
       const params = {
@@ -35,15 +79,24 @@
         params
       });
 
-      items.value = data;
+      items.value = data.map((obj) => ({
+        ...obj,
+        isFavorite: false,
+        favoriteId: null,
+        isAdded: false
+      }))
+
     } catch (e) {
       console.log(e)
     }
   }
 
-  onMounted(fetchItems);
-  watch(filters, fetchItems);
+  onMounted(async () => {
+    await fetchItems();
+    await fetchFavorites();
+  })
 
+  watch(filters, fetchItems);
 </script>
 
 <template>
@@ -72,7 +125,7 @@
         </div>
       </div>
 
-      <CardsList :items='items' />
+      <CardsList :items='items' @addToFavorite='addToFavorites' />
     </section>
   </div>
 </template>

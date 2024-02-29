@@ -1,12 +1,13 @@
 <script setup>
   defineProps({
+    id: Number,
     imageUrl: String,
     title: String,
     price: Number,
     isFavorite: Boolean,
     isAdded: Boolean,
-    onClickAdd: Function,
-    onClickFavourite: Function,
+    // onClickAdd: Function,
+    onClickFavorite: Function,
   })
 </script>
 
@@ -14,7 +15,7 @@
   <li class='relative bg-white rounded-3xl border border-slate-100 p-8 cursor-pointer transition hover:-translate-y-2 hover:shadow-xl'>
     <img class='absolute top-8 left-8'
          :src='isFavorite ? "/like-2.svg" : "/like-1.svg"'
-         @click='onClickFavourite'
+         @click='onClickFavorite'
          alt='Иконка нравится активна'/>
     <img :src='imageUrl' alt='Фото кроссовок'/>
     <p class='mt-2'>{{ title }}</p>
