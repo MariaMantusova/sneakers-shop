@@ -1,17 +1,26 @@
 <script setup>
-  import {onMounted, reactive, ref, watch, provide} from 'vue';
-  import axios from 'axios';
+  import { onMounted, reactive, ref, watch, provide } from 'vue'
+  import axios from 'axios'
 
-  import Header from './components/Header.vue';
-  import CardsList from './components/CardsList.vue';
-  import Drawer from './components/Drawer.vue';
+  import Header from './components/Header.vue'
+  import CardsList from './components/CardsList.vue'
+  import Drawer from './components/Drawer.vue'
 
-  const items = ref([]);
+  const items = ref([])
+  const drawerOpen = ref(false)
 
   const filters = reactive({
     sortBy: 'title',
-    searchQuery: '',
+    searchQuery: ''
   })
+
+  function closeDrawer() {
+    drawerOpen.value = false
+  }
+
+  function openDrawer() {
+    drawerOpen.value = true
+  }
 
   function onChangeSelect(evt) {
     filters.sortBy = evt.target.value
@@ -26,16 +35,16 @@
       const { data: favorites } = await axios.get('https://4860d1de94ba74d5.mokky.dev/favorites')
 
       items.value = items.value.map(item => {
-        const favoriteItem = favorites.find(favorite => favorite.parentId === item.id);
+        const favoriteItem = favorites.find(favorite => favorite.parentId === item.id)
 
         if (!favoriteItem) {
-          return item;
+          return item
         }
 
         return {
           ...item,
           isFavorite: true,
-          favoriteId: favoriteItem.id,
+          favoriteId: favoriteItem.id
         }
       })
     } catch (e) {
@@ -49,15 +58,15 @@
         const obj = {
           parentId: item.id
         }
-        item.isFavorite = true;
+        item.isFavorite = true
 
-        const {data} = await axios.post('https://4860d1de94ba74d5.mokky.dev/favorites', obj);
+        const { data } = await axios.post('https://4860d1de94ba74d5.mokky.dev/favorites', obj)
 
-        item.favoriteId = data.id;
+        item.favoriteId = data.id
       } else {
-        item.isFavorite = false;
-        await axios.delete(`https://4860d1de94ba74d5.mokky.dev/favorites/${item.favoriteId}`);
-        item.favoriteId = null;
+        item.isFavorite = false
+        await axios.delete(`https://4860d1de94ba74d5.mokky.dev/favorites/${item.favoriteId}`)
+        item.favoriteId = null
       }
 
     } catch (e) {
@@ -68,7 +77,7 @@
   async function fetchItems() {
     try {
       const params = {
-        sortBy: filters.sortBy,
+        sortBy: filters.sortBy
       }
 
       if (filters.searchQuery) {
@@ -77,7 +86,7 @@
 
       const { data } = await axios.get('https://4860d1de94ba74d5.mokky.dev/items', {
         params
-      });
+      })
 
       items.value = data.map((obj) => ({
         ...obj,
@@ -92,17 +101,22 @@
   }
 
   onMounted(async () => {
-    await fetchItems();
-    await fetchFavorites();
+    await fetchItems()
+    await fetchFavorites()
   })
 
-  watch(filters, fetchItems);
+  watch(filters, fetchItems)
+
+  provide('drawerActions', {
+    closeDrawer,
+    openDrawer
+  })
 </script>
 
 <template>
-  <!--  <Drawer />-->
+  <Drawer v-if='drawerOpen' />
   <div class='bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14'>
-    <Header />
+    <Header @openDrawer='openDrawer' />
     <section class='p-10'>
       <div class='flex justify-between items-center'>
         <h2 class='text-3xl font-bold mb-8'>Все кроссовки</h2>
@@ -125,7 +139,7 @@
         </div>
       </div>
 
-      <CardsList :items='items' @addToFavorite='addToFavorites' />
+      <CardsList :items='items' @addToFavorite='add-to-favorites' />
     </section>
   </div>
 </template>
