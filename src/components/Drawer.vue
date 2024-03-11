@@ -3,8 +3,9 @@ import { computed } from 'vue';
   import DrawerHead from './DrawerHead.vue';
   import DrawerItem from './DrawerItem.vue';
   import DrawerItemsList from './DrawerItemsList.vue';
+import InfoBlock from './InfoBlock.vue';
 
-  const emit = defineEmits(['createOrder'])
+const emit = defineEmits(['createOrder'])
 
   defineProps({
     totalPrice: Number,
@@ -18,8 +19,13 @@ import { computed } from 'vue';
   <div class='fixed top-0 left-0 h-full w-full bg-black opacity-70 z-10'></div>
   <section class='fixed z-20 bg-white w-96 h-full right-0 top-0 p-8'>
     <DrawerHead />
+    <div v-if='!totalPrice' class='flex h-full items-center'>
+      <InfoBlock title='Корзина пустая'
+                 description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ'
+                 imageUrl='/package-icon.png' />
+    </div>
     <DrawerItemsList />
-    <div class='flex flex-col gap-4 mt-7'>
+    <div v-if='totalPrice' class='flex flex-col gap-4 mt-7'>
       <div class='flex gap-2'>
         <span>Итого:</span>
         <div class='flex-1 border-b border-dashed'></div>
