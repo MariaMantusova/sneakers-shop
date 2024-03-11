@@ -9,9 +9,12 @@
   const items = ref([]);
   const drawer = ref([]);
   const drawerOpen = ref(false);
+  const isCreatingOrder = ref(false);
 
+  const drawerIsEmpty = computed(() => drawer.value.length === 0);
   const totalPrice = computed(() => drawer.value.reduce((acc, item) => acc + item.price, 0));
   const vatPrice = computed(() => Math.round((totalPrice.value * 5) / 100));
+  const drawerButtonDisabled = computed(() => isCreatingOrder.value || drawerIsEmpty.value);
 
   const filters = reactive({
     sortBy: 'title',
@@ -34,6 +37,14 @@
   function removeFromCart(item) {
     drawer.value.splice(drawer.value.indexOf(item), 1);
     item.isAdded = false
+  }
+
+  function onClickAddToCart(item) {
+    if (!item.isAdded) {
+      addToCart(item)
+    } else {
+      removeFromCart(item)
+    }
   }
 
   function onChangeSelect(evt) {
@@ -88,14 +99,6 @@
     }
   }
 
-  function onClickAddToCart(item) {
-    if (!item.isAdded) {
-      addToCart(item)
-    } else {
-      removeFromCart(item)
-    }
-  }
-
   async function fetchItems() {
     try {
       const params = {
@@ -122,11 +125,35 @@
     }
   }
 
+  async function createOrder() {
+    try {
+      isCreatingOrder.value = true
+      const { data } = await axios.post("https://4860d1de94ba74d5.mokky.dev/orders", {
+        items: drawer.value,
+        totalPrice: totalPrice.value
+      })
+
+      drawer.value = []
+
+      return data
+    } catch (e) {
+      console.log(e)
+    } finally {
+      isCreatingOrder.value = false
+    }
+  }
+
   onMounted(async () => {
     await fetchItems()
     await fetchFavorites()
   })
-  watch(filters, fetchItems)
+  watch(filters, fetchItems);
+  watch(drawer, () => {
+    items.value = items.value.map((item) => ({
+      ...item,
+      isAdded: false
+    }))
+  });
 
   provide('drawer', {
     drawer,
@@ -137,7 +164,8 @@
 </script>
 
 <template>
-  <Drawer v-if='drawerOpen' :totalPrice='totalPrice' :vatPrice='vatPrice' />
+  <Drawer v-if='drawerOpen' :total-price='totalPrice' :vat-price='vatPrice' @create-order='createOrder'
+          :button-disabled='drawerButtonDisabled'/>
   <div class='bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14'>
     <Header :total-price='totalPrice' @open-drawer='openDrawer' />
     <section class='p-10'>
