@@ -6,7 +6,7 @@
 </script>
 
 <template>
-  <ul class='flex flex-col gap-4'>
+  <ul class='flex flex-col gap-4' v-auto-animate>
     <DrawerItem v-for='item in drawer' :key='item.id' :imageUrl='item.imageUrl'
                 :price='item.price' :title='item.title'
                 @on-click-remove='() => removeFromCart(item)'
