@@ -144,16 +144,30 @@
   }
 
   onMounted(async () => {
-    await fetchItems()
-    await fetchFavorites()
+    const localDrawer = localStorage.getItem('drawer');
+    drawer.value = localDrawer ? JSON.parse(localDrawer) : [];
+
+    await fetchItems();
+    await fetchFavorites();
+
+    items.value = items.value.map((item) => ({
+      ...item,
+      isAdded: drawer.value.some((drawerItem) => drawerItem.id === item.id)
+    }))
   })
+
   watch(filters, fetchItems);
+
   watch(drawer, () => {
     items.value = items.value.map((item) => ({
       ...item,
       isAdded: false
     }))
   });
+
+  watch(drawer, () => {
+    localStorage.setItem('drawer', JSON.stringify(drawer.value));
+  }, {deep: true})
 
   provide('drawer', {
     drawer,

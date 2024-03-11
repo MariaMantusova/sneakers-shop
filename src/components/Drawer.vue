@@ -1,9 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+  import { computed } from 'vue';
   import DrawerHead from './DrawerHead.vue';
   import DrawerItem from './DrawerItem.vue';
   import DrawerItemsList from './DrawerItemsList.vue';
-import InfoBlock from './InfoBlock.vue';
+  import InfoBlock from './InfoBlock.vue';
 
 const emit = defineEmits(['createOrder'])
 
