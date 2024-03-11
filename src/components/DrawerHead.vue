@@ -1,7 +1,7 @@
 <script setup>
   import { inject } from "vue";
 
-  const { closeDrawer } = inject('drawerActions');
+  const { closeDrawer } = inject('drawer');
 </script>
 
 <template>

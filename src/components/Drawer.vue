@@ -2,6 +2,11 @@
   import DrawerHead from './DrawerHead.vue';
   import DrawerItem from './DrawerItem.vue';
   import DrawerItemsList from './DrawerItemsList.vue';
+
+  defineProps({
+    totalPrice: Number,
+    vatPrice: Number
+  })
 </script>
 
 <template>
@@ -13,12 +18,12 @@
       <div class='flex gap-2'>
         <span>Итого:</span>
         <div class='flex-1 border-b border-dashed'></div>
-        <b>12990 руб.</b>
+        <b>{{ totalPrice }} руб.</b>
       </div>
       <div class='flex gap-2'>
         <span>Налог 5%</span>
         <div class='flex-1 border-b border-dashed'></div>
-        <b>900 руб.</b>
+        <b>{{ vatPrice }} руб.</b>
       </div>
       <button class='transition bg-lime-500 w-full rounded-xl py-3 disabled:bg-slate-400 text-white
       hover:bg-lime-600 active:bg-lime-700 cursor-pointer mt-4'>

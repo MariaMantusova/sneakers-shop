@@ -1,13 +1,17 @@
 <script setup>
-  import { onMounted, reactive, ref, watch, provide } from 'vue'
+  import { onMounted, reactive, ref, watch, provide, computed } from 'vue'
   import axios from 'axios'
 
-  import Header from './components/Header.vue'
-  import CardsList from './components/CardsList.vue'
-  import Drawer from './components/Drawer.vue'
+  import Header from './components/Header.vue';
+  import CardsList from './components/CardsList.vue';
+  import Drawer from './components/Drawer.vue';
 
-  const items = ref([])
-  const drawerOpen = ref(false)
+  const items = ref([]);
+  const drawer = ref([]);
+  const drawerOpen = ref(false);
+
+  const totalPrice = computed(() => drawer.value.reduce((acc, item) => acc + item.price, 0));
+  const vatPrice = computed(() => Math.round((totalPrice.value * 5) / 100));
 
   const filters = reactive({
     sortBy: 'title',
@@ -20,6 +24,16 @@
 
   function openDrawer() {
     drawerOpen.value = true
+  }
+
+  function addToCart(item) {
+    drawer.value.push(item);
+    item.isAdded = true;
+  }
+
+  function removeFromCart(item) {
+    drawer.value.splice(drawer.value.indexOf(item), 1);
+    item.isAdded = false
   }
 
   function onChangeSelect(evt) {
@@ -74,6 +88,14 @@
     }
   }
 
+  function onClickAddToCart(item) {
+    if (!item.isAdded) {
+      addToCart(item)
+    } else {
+      removeFromCart(item)
+    }
+  }
+
   async function fetchItems() {
     try {
       const params = {
@@ -104,19 +126,20 @@
     await fetchItems()
     await fetchFavorites()
   })
-
   watch(filters, fetchItems)
 
-  provide('drawerActions', {
+  provide('drawer', {
+    drawer,
     closeDrawer,
-    openDrawer
+    openDrawer,
+    removeFromCart
   })
 </script>
 
 <template>
-  <Drawer v-if='drawerOpen' />
+  <Drawer v-if='drawerOpen' :totalPrice='totalPrice' :vatPrice='vatPrice' />
   <div class='bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14'>
-    <Header @openDrawer='openDrawer' />
+    <Header :total-price='totalPrice' @open-drawer='openDrawer' />
     <section class='p-10'>
       <div class='flex justify-between items-center'>
         <h2 class='text-3xl font-bold mb-8'>Все кроссовки</h2>
@@ -139,7 +162,7 @@
         </div>
       </div>
 
-      <CardsList :items='items' @addToFavorite='add-to-favorites' />
+      <CardsList :items='items' @add-to-favorite='addToFavorites' @add-to-cart='onClickAddToCart' />
     </section>
   </div>
 </template>

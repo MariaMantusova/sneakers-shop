@@ -6,7 +6,7 @@
     price: Number,
     isFavorite: Boolean,
     isAdded: Boolean,
-    // onClickAdd: Function,
+    onClickAdd: Function,
     onClickFavorite: Function,
   })
 </script>
@@ -17,7 +17,7 @@
          :src='isFavorite ? "/like-2.svg" : "/like-1.svg"'
          @click='onClickFavorite'
          alt='Иконка нравится активна'/>
-    <img :src='imageUrl' alt='Фото кроссовок'/>
+    <img :src='imageUrl' :alt='title'/>
     <p class='mt-2'>{{ title }}</p>
     <div class='flex justify-between mt-5'>
       <div class='flex flex-col'>
