@@ -51,6 +51,27 @@
     }
   }
 
+  async function addToFavorites(item) {
+    try {
+      if (!item.isFavorite) {
+        const obj = {
+          item_id: item.id
+        }
+        item.isFavorite = true
+
+        const { data } = await axios.post('https://4860d1de94ba74d5.mokky.dev/favorites', obj)
+
+        item.favoriteId = data.id
+      } else {
+        item.isFavorite = false
+        await axios.delete(`https://4860d1de94ba74d5.mokky.dev/favorites/${item.favoriteId}`)
+        item.favoriteId = null
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   watch(drawer, () => {
     localStorage.setItem('drawer', JSON.stringify(drawer.value));
   }, {deep: true})
@@ -62,6 +83,7 @@
     addToCart,
     removeFromCart
   })
+  provide('favorites', { addToFavorites })
 </script>
 
 <template>

@@ -24,7 +24,7 @@
         <h3 class='text-slate-400'>Цена:</h3>
         <span>{{ price }} руб.</span>
       </div>
-      <img @click='onClickAdd' :src='!isAdded ? "/plus.svg" : "/checked.svg"' alt='Добавить в корзину'>
+      <img v-if='onClickAdd' @click='onClickAdd' :src='!isAdded ? "/plus.svg" : "/checked.svg"' alt='Добавить в корзину'>
     </div>
   </li>
 </template>

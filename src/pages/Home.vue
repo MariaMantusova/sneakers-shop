@@ -6,6 +6,7 @@
   const items = ref([]);
 
   const { drawer, addToCart, removeFromCart} = inject("drawer");
+  const { addToFavorites } = inject("favorites");
 
   const filters = reactive({
     sortBy: 'title',
@@ -17,6 +18,7 @@
   }
 
   function onClickAddToCart(item) {
+    console.log(item, "home")
     if (!item.isAdded) {
       addToCart(item)
     } else {
@@ -28,34 +30,12 @@
     filters.searchQuery = evt.target.value
   }
 
-  async function addToFavorites(item) {
-    try {
-      if (!item.isFavorite) {
-        const obj = {
-          parentId: item.id
-        }
-        item.isFavorite = true
-
-        const { data } = await axios.post('https://4860d1de94ba74d5.mokky.dev/favorites', obj)
-
-        item.favoriteId = data.id
-      } else {
-        item.isFavorite = false
-        await axios.delete(`https://4860d1de94ba74d5.mokky.dev/favorites/${item.favoriteId}`)
-        item.favoriteId = null
-      }
-
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   async function fetchFavorites() {
     try {
       const { data: favorites } = await axios.get('https://4860d1de94ba74d5.mokky.dev/favorites')
 
       items.value = items.value.map(item => {
-        const favoriteItem = favorites.find(favorite => favorite.parentId === item.id)
+        const favoriteItem = favorites.find(favorite => favorite.item_id === item.id)
 
         if (!favoriteItem) {
           return item
