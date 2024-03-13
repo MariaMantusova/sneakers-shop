@@ -12,7 +12,10 @@
   })
 
   const {drawer, closeDrawer} = inject("drawer");
+
   const isCreatingOrder = ref(false);
+  const orderId = ref(null);
+
   const drawerIsEmpty = computed(() => drawer.value.length === 0);
   const drawerButtonDisabled = computed(() => isCreatingOrder.value || drawerIsEmpty.value);
 
@@ -25,8 +28,7 @@
       })
 
       drawer.value = []
-
-      return data
+      orderId.value = data.id
     } catch (e) {
       console.log(e)
     } finally {
@@ -40,11 +42,16 @@
   <div class='fixed top-0 left-0 h-full w-full bg-black opacity-70 z-10'></div>
   <section class='fixed z-20 bg-white w-96 h-full right-0 top-0 p-8'>
     <DrawerHead />
-    <div v-if='!props.totalPrice' class='flex h-full items-center'>
-      <InfoBlock title='Корзина пустая'
+
+    <div v-if='!props.totalPrice || orderId' class='flex h-full items-center'>
+      <InfoBlock title='Заказ оформлен' v-if='orderId'
+                 :description='`Ваш заказ №${orderId} скоро будет передан курьерской доставке`'
+                 imageUrl='/order-success-icon.png' />
+      <InfoBlock title='Корзина пустая' v-if='!props.totalPrice g&& !orderId'
                  description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ'
                  imageUrl='/package-icon.png' />
     </div>
+
     <DrawerItemsList />
     <div v-if='props.totalPrice' class='flex flex-col gap-4 mt-7'>
       <div class='flex gap-2'>
