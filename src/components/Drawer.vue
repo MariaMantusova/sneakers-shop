@@ -47,7 +47,7 @@
       <InfoBlock title='Заказ оформлен' v-if='orderId'
                  :description='`Ваш заказ №${orderId} скоро будет передан курьерской доставке`'
                  imageUrl='/order-success-icon.png' />
-      <InfoBlock title='Корзина пустая' v-if='!props.totalPrice g&& !orderId'
+      <InfoBlock title='Корзина пустая' v-if='!props.totalPrice && !orderId'
                  description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ'
                  imageUrl='/package-icon.png' />
     </div>
