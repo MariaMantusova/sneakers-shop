@@ -24,7 +24,7 @@
       isCreatingOrder.value = true
       const { data } = await axios.post('https://4860d1de94ba74d5.mokky.dev/orders', {
         items: drawer.value,
-        totalPrice: props.totalPrice.value
+        totalPrice: props.totalPrice
       })
 
       drawer.value = []
