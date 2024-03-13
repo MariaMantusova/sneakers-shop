@@ -1,35 +1,28 @@
-# npm
+# Проект "Sneakers Shop"
 
-This template should help get you started developing with Vue 3 in Vite.
+## О проекте
+Данный проект - это мини-версия онлайн магазина кроссовок. 
+С возможностью оформления заказа и добавления товара в закладки.
 
-## Recommended IDE Setup
+## Технологии
+* Vue.js
+* Vite
+* Tailwind
+* Lodash.debounce
+* Axios
+* Vue Router
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+___
 
-## Customize configuration
+[Посмотреть сайт 👟](https://sneakers-shop-dusky.vercel.app/)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+___
 
-## Project Setup
+## Запуск проекта 
 
 ```sh
+git clone https://github.com/MariaMantusova/sneakers-shop.git
+
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
