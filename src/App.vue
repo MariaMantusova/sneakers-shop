@@ -8,12 +8,9 @@
 
   const drawer = ref([]);
   const drawerOpen = ref(false);
-  const isCreatingOrder = ref(false);
 
-  const drawerIsEmpty = computed(() => drawer.value.length === 0);
   const totalPrice = computed(() => drawer.value.reduce((acc, item) => acc + item.price, 0));
   const vatPrice = computed(() => Math.round((totalPrice.value * 5) / 100));
-  const drawerButtonDisabled = computed(() => isCreatingOrder.value || drawerIsEmpty.value);
 
   function closeDrawer() {
     drawerOpen.value = false
@@ -31,24 +28,6 @@
   function removeFromCart(item) {
     drawer.value.splice(drawer.value.indexOf(item), 1);
     item.isAdded = false
-  }
-
-  async function createOrder() {
-    try {
-      isCreatingOrder.value = true
-      const { data } = await axios.post("https://4860d1de94ba74d5.mokky.dev/orders", {
-        items: drawer.value,
-        totalPrice: totalPrice.value
-      })
-
-      drawer.value = []
-
-      return data
-    } catch (e) {
-      console.log(e)
-    } finally {
-      isCreatingOrder.value = false
-    }
   }
 
   async function addToFavorites(item) {
@@ -87,8 +66,7 @@
 </script>
 
 <template>
-  <Drawer v-if='drawerOpen' :total-price='totalPrice' :vat-price='vatPrice' @create-order='createOrder'
-          :button-disabled='drawerButtonDisabled'/>
+  <Drawer v-if='drawerOpen' :total-price='totalPrice' :vat-price='vatPrice'/>
   <div class='bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14'>
     <Header :total-price='totalPrice' @open-drawer='openDrawer' />
     <section class='p-10'>

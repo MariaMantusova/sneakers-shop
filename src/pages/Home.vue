@@ -18,7 +18,6 @@
   }
 
   function onClickAddToCart(item) {
-    console.log(item, "home")
     if (!item.isAdded) {
       addToCart(item)
     } else {
