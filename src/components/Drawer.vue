@@ -1,6 +1,6 @@
 <script setup>
   import axios from 'axios';
-  import { computed, inject, provide, ref } from 'vue';
+  import { computed, inject, ref } from 'vue';
   import DrawerHead from './DrawerHead.vue';
   import DrawerItem from './DrawerItem.vue';
   import DrawerItemsList from './DrawerItemsList.vue';

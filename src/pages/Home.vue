@@ -1,7 +1,7 @@
 <script setup>
   import axios from 'axios';
+  import { inject, onMounted, reactive, ref, watch } from 'vue';
   import debounce from "lodash.debounce";
-  import { inject, onMounted, reactive, ref, watch } from 'vue'
   import CardsList from '../components/CardsList.vue';
 
   const items = ref([]);
