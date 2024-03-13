@@ -28,12 +28,14 @@
       <li>
         <router-link to='/favorites' class='flex items-center gap-3 text-gray-500 hover:text-black cursor-pointer'>
           <img src='/heart.svg' alt='Иконка закладок'>
-          <span>Закладки</span>
+          <span>Мои закладки</span>
         </router-link>
       </li>
-      <li class='flex items-center gap-3 text-gray-500 hover:text-black cursor-pointer'>
-        <img src='/profile.svg' alt='Иконка профиля'>
-        <span>Профиль</span>
+      <li>
+        <router-link to='/orders' class='flex items-center gap-3 text-gray-500 hover:text-black cursor-pointer'>
+        <img src='/profile.svg' alt='Иконка покупок'>
+        <span>Мои покупки</span>
+        </router-link>
       </li>
     </ul>
 
